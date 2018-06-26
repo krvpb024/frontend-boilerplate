@@ -19,7 +19,7 @@ function getEntry (ext) {
       case 'html':
         htmlPlugin.push(
           new HtmlWebpackPlugin({
-            chunks: [fileName[0]],
+            chunks: [fileName[0], 'vendors'],
             hash: true,
             filename: `./${fileName[0]}.${ext}`,
             template: `${rootPath}${fileName.input}`
@@ -85,4 +85,15 @@ module.exports = {
     }),
     new CleanWebpackPlugin(path.resolve(__dirname, 'dist')),
   ],
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
+  }
 };
